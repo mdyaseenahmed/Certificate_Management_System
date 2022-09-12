@@ -14,8 +14,10 @@ const Base = ({
       </div>
       <div className={className}>{children}</div>
       <div className="mt-4 mb-0 footer text-center">
-        {/* <br /> */}
-        <h4 className="p-4">For any Queries, Please reach us at <button className="btn btn-primary">contact</button></h4>
+        <h4 className="p-4">
+          For any Queries, Please reach to us at{" "}
+          <button className="btn btn-primary">contact</button>
+        </h4>
       </div>
     </div>
   </div>

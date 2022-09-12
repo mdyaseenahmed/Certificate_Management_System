@@ -27,7 +27,7 @@ export const signin = (user) => {
         body: JSON.stringify(user)
     })
     .then((response)=> {
-        console.log(response)
+        // console.log(response)
         return response.json();
     })
     .catch((err) => {
@@ -51,7 +51,7 @@ export const signout = (next) => {
             method: 'GET',
         })
         .then((response) => {
-            console.log("Sign out Successfully.!");
+            console.log("Signed out Successfully.!");
         })
         .catch((error) => {
             console.log(error);

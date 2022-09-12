@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { authenticate, isAuthenticated, signin } from '../auth/helper';
 
 const Login = () => {
+
+    const navigate  = useNavigate()
 
     const [values, setValues] = useState({
         email: "",
@@ -13,7 +16,7 @@ const Login = () => {
 
     const { user } = isAuthenticated();
 
-    const { email, password, redirect, error, success } = values;
+    const { email, password, redirect, error } = values;
 
     const handleChange = (fieldName) => (e) => {
         setValues({...values, error: false, [fieldName]: e.target.value})
@@ -32,7 +35,12 @@ const Login = () => {
                 });
             } else {
                 authenticate(data, ()=>{
-                    setValues({...values, redirect: true })
+                    setValues({
+                        ...values,
+                        redirect: true,
+                        email: "",
+                        password: ""
+                    })
                 })
             }
         })
@@ -42,26 +50,37 @@ const Login = () => {
     const redirectUser = () => {
         if(redirect) {
             if(user && user.userType === 'regular') {
-                console.log("At Regular Redirect")
-                return <h1>Hello User;</h1>;
+                navigate('/dashboard');
             }
         }
-        if (isAuthenticated()) {
-            console.log("At Redirect")
-            return <h1>Bye User;</h1>;
-            // return "Bye User.!"
-            // return <ReactRedirect to="https://nodejs.org/" />;
-       }
     }
 
+    const errorMessage = () => {
+        return (
+             <div className="row">
+                  <div className="col-md-6 offset-sm-3 text-left">
+                       <div
+                            className="alert alert-danger text-center"
+                            style={{ display: error ? "" : "none" }}
+                       >
+                            {error}
+                       </div>
+                  </div>
+             </div>
+        );
+   };
+
+   const loginForm = () => {
     return (
         <div className="card mb-4">
             <h4 className="card-header">
                 <b><span className="fa fa-user-circle"></span> Login </b>
             </h4>
             <form>
+                <br />
+                {errorMessage()}
+                {redirectUser()}
                 <div className="form-group">
-                    <br />
                     <label>Email Id: </label>
                     <input 
                     className="form-control1"
@@ -87,13 +106,21 @@ const Login = () => {
                     />
                     <br/>
                 </div>
+                {/* <p>New User.? <NavLink to="/signup">Register Here</NavLink></p> */}
                 <div className="form-group">
-                    <button type="submit" onClick={(e)=>{handleSubmit(e)}} className="btn btn-outline-success m-2">Login</button>
+                    <button type="submit" onClick={(e)=>{handleSubmit(e)}} className="btn btn-outline-success mb-2">Login</button>
                 </div>
-                <h5 className="text-center">{JSON.stringify(values)}</h5>
             </form>
-            {redirectUser()}
         </div>
+    );
+   }
+
+    return (
+        <>
+            {
+                isAuthenticated() ? <Navigate to="/dashboard" /> : loginForm()
+            }
+        </>
     )
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { signup } from '../auth/helper';
+import { Navigate } from 'react-router-dom';
+import { isAuthenticated, signup } from '../auth/helper';
 
 const SignUp = () => {
 
@@ -137,13 +137,13 @@ const SignUp = () => {
                     />
                     <br />
                 </div>
-
+                {/* <p>Already have an account.? <NavLink to="/login">Login Here</NavLink></p> */}
                 <div className="form-group">
                     <button type="submit" onClick = {handleSubmit} className="btn btn-outline-success m-2">SignUp</button>
                     <button type="reset" className="btn btn-outline-secondary m-2">Reset</button>
                 </div>
                 
-                <h5 className="text-center">{JSON.stringify(values)}</h5>
+                {/* <h5 className="text-center">{JSON.stringify(values)}</h5> */}
             </form>
         )
     }
@@ -183,15 +183,20 @@ const SignUp = () => {
    };
 
     return (
-        <div className="card mb-4">
-            <h4 className="card-header">
-                <b><span className="fa fa-user-plus"></span> Sign Up </b>
-            </h4>
-            <br />
-                {successMessage()}
-                {errorMessage()}
-                {signUpForm()}
-        </div>
+        <>
+            {
+                isAuthenticated() ? <Navigate to="/dashboard"></Navigate> :
+                (<div className="card mb-4">
+                    <h4 className="card-header">
+                        <b><span className="fa fa-user-plus"></span> Sign Up </b>
+                    </h4>
+                    <br />
+                        {successMessage()}
+                        {errorMessage()}
+                        {signUpForm()}
+                </div>)
+            }   
+        </>
     );
 };
 

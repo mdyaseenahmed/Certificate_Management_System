@@ -1,6 +1,7 @@
 import React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Link, Navigate, NavLink, Outlet } from 'react-router-dom';
 import Base from '../Core/Base';
+import { isAuthenticated } from '../auth/helper';
 
 const Home = () => {
 
@@ -10,7 +11,7 @@ const Home = () => {
         return (
             <div className="card text-center">
                 <h3 className="card-header text-center borderBottom">
-                    <b><span className="fa fa-home"></span> Home</b>
+                    <b><span className="fa fa-home"></span><Link to="/"> Home</Link></b>
                 </h3>
                 <ul className="list-group text-center">
                     <li className="list-group-item">
@@ -29,31 +30,30 @@ const Home = () => {
                             <span className="fa fa-user-circle"></span> Login
                         </NavLink>
                     </li>
-                    <li className="list-group-item">
-                        <NavLink
-                            to="/about"
-                            className="nav-link"
-                        >
-                            <span className="fa fa-info-circle"></span> About the Project
-                        </NavLink>
-                    </li>
                 </ul>
             </div>
         );
     };
 
     return(
-        <Base title="Certificate Management System" description="Welcome to Certificate Management System.!">
-            <div className="row">
-                <div className="col-lg-3 col-sm-12">{sideNavigation()}</div>
-                <div className="col-lg-9 col-sm-12">
-                    {/* <h1>Welcome to CMS System.!</h1> */}
-                    <Outlet/>
+        <>
+        { isAuthenticated()
+            ? <Navigate to="/dashboard" />
+            : (<Base title="Certificate Management System" description="Welcome to Certificate Management System.!">
+                <div className="row">
+                    <div className="col-lg-3 col-sm-12">{sideNavigation()}</div>
+                    <br />
+                    <div className="col-lg-9 col-sm-12">
+                        {/* <h1>Welcome to CMS System.!</h1> */}
+                        <Outlet/>
+                    </div>
                 </div>
-            </div>
 
-        </Base>
+            </Base>)
+        }
+        </>
     )
+
 }
 
 export default Home;

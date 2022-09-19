@@ -4,7 +4,7 @@ const About = () => {
     return (
         <div className="card mb-4">
             <h4 className="card-header">
-                <b><span className="fa fa-info-circle"></span> About the Project </b>
+                <b><span className="fa fa-info-circle"></span> Overview </b>
             </h4>
             <div>
                 <h5 className="mt-3 text-left ml-4 px-2"><u>Digital Certificate: </u></h5>

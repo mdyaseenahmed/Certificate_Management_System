@@ -1,7 +1,7 @@
 import { API } from "../../backendAPI";
 
 export const signup = (user) => {
-    return fetch(`http://localhost:5000/signup`, {
+    return fetch(`${API}/signup`, {
         method: 'POST',
         headers: { 
             Accept: 'application/json',
@@ -18,7 +18,7 @@ export const signup = (user) => {
 };
 
 export const signin = (user) => {
-    return fetch(`http://localhost:5000/signin`, {
+    return fetch(`${API}/signin`, {
         method: 'POST',
         headers: { 
             Accept: 'application/json',

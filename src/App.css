@@ -31,3 +31,55 @@ a {
 a:hover {
   text-decoration: none;
 }
+
+.csrLabel {
+  text-align: left;
+  width: 30%;
+}
+
+.csrTable {
+  /* align-items: center; */
+  width: -webkit-fill-available;
+  margin-left: 4rem; 
+  margin-right: 4rem; 
+  margin-bottom: 1rem;
+  /* margin-top: 2rem;  */
+}
+
+.signupLabel {
+  width: 20%;
+  text-align: left;
+}
+
+.multiSelectDropDown {
+  /* overflow-x: 300px; */
+  /* overflow-y: auto; */
+  /* height: 100%; */
+    white-space: normal;
+    /* text-overflow: ellipsis; */
+    width: 20rem !important;
+}
+
+.logout {
+  color: red;
+  font-size: 1.1rem;
+}
+
+.logout:hover {
+  font-weight: bold;
+  color: red;
+}
+
+.list-group-item {
+  font-size: 1.1rem;
+}
+
+.certData {
+  margin-left: 4rem;
+  margin-right: 4rem;
+  margin-bottom: 4rem;
+}
+
+.csrForm {
+  margin-bottom: 2rem;
+}

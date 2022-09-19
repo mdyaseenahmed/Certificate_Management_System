@@ -10,13 +10,13 @@ const SignUp = () => {
         email: "",
         department: "",
         password: "",
-        cnfPassword: "",
         error: "",
         success: false,
-        userType: "regular"
+        userType: "regular",
+        loading: false
     })
 
-    const { firstName, lastName, email, department, password, cnfPassword, userType, success, error } = values;
+    const { firstName, lastName, email, department, password, userType, success, error, loading } = values;
 
     const handleChange = (fieldName) => (e) => { 
         setValues({...values, error: false, [fieldName]: e.target.value});
@@ -24,7 +24,7 @@ const SignUp = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setValues({...values, error: false});
+        setValues({...values, error: false, loading: true});
         signup({ firstName, lastName, department, email, password, userType })
         .then((data)=>{
             console.log(data)
@@ -32,7 +32,8 @@ const SignUp = () => {
                 setValues({
                     ...values,
                     error: data.error,
-                    success: false
+                    success: false,
+                    loading: false,
                 });
             } else {
                 setValues({
@@ -43,107 +44,142 @@ const SignUp = () => {
                     password: "",
                     cnfPassword: "",
                     error: "",
-                    success: true
+                    success: true,
+                    loading: false
                 })
             }
         })
         .catch(console.log("Error at Signup.!"))
     }
 
+    const loadingMessage = () => {
+        return (
+            <div id="loader" className="text-center m-4">
+                <h2>Loading...<i className="fa fa-cog fa-spin fa-fw"></i></h2>
+            </div>
+        );
+    }
+
     const signUpForm = () => {
         return (
+            loading ? loadingMessage () : 
             <form>
-                <div className="form-group">
-                    <label>First Name: </label>
-                    <input 
-                    className="form-control1"
-                    id="firstName"
-                    type="text"
-                    placeholder="John" 
-                    value={firstName}
-                    onChange={handleChange("firstName")}
-                    required
-                    />
-                    <br />  
-                    {/* <small>Hlelo this is a error</small> */}
-                </div>
+                <table style={{ width: "-webkit-fill-available", marginLeft: "4rem", marginRight: "4rem" }}>
+                    <tbody>
+                        <tr>
+                            <td className="signupLabel">
+                                <label>First Name: </label>
+                            </td>
+                            <td>
+                                <div className="form-group">
+                                    <input 
+                                    className="form-control"
+                                    id="firstName"
+                                    type="text"
+                                    placeholder="John" 
+                                    value={firstName}
+                                    onChange={handleChange("firstName")}
+                                    required
+                                    autoComplete='off'
+                                    />
+                                </div>
+                            </td>
+                        </tr>
 
-                <div className="form-group">
-                    <label>Last Name: </label>
-                    <input 
-                    className="form-control1"
-                    id="lastName"
-                    type="text"
-                    placeholder="Doe"
-                    value={lastName} 
-                    onChange={handleChange("lastName")}
-                    required
-                    />
-                    <br /> 
-                </div>
-        
-                <div className="form-group">
-                    <label>Email Id: </label>
-                    <input
-                    className="form-control1"
-                    id="email"
-                    type="email" 
-                    placeholder="user@team.telstra.com"
-                    value={email}
-                    onChange={handleChange("email")}
-                    required
-                    />
-                    <br/>   
-                </div>
+                        <tr>
+                            <td className="signupLabel">
+                                <label>Last Name: </label>
+                            </td>
+                            <td>
+                                <div className="form-group">
+                                    <input 
+                                    className="form-control"
+                                    id="lastName"
+                                    type="text"
+                                    placeholder="Doe"
+                                    value={lastName} 
+                                    onChange={handleChange("lastName")}
+                                    required
+                                    autoComplete="off"
+                                    />
+                                </div>
+                            </td>
+                        </tr>
 
-                <div className="form-group">
-                    <label>Department: </label>
-                    <input 
-                    className="form-control1"
-                    id="dept"
-                    type="text"
-                    placeholder="Enter Your Department" 
-                    value={department}
-                    onChange={handleChange("department")}
-                    required
-                    />
-                    <br /> 
-                </div>
+                        <tr>
+                            <td className="signupLabel">
+                                <label>Email Id: </label>
+                            </td>
+                            <td>
+                                <div className="form-group">
+                                    <input
+                                    className="form-control"
+                                    id="email"
+                                    type="email" 
+                                    placeholder="user@team.telstra.com"
+                                    value={email}
+                                    onChange={handleChange("email")}
+                                    required
+                                    autoComplete="off"
+                                    />
+                                </div>
+                            </td>
+                        </tr>
 
-                <div className="form-group">
-                    <label>Password: </label>
-                    <input 
-                    className="form-control1"
-                    id="password"
-                    type="password"
-                    placeholder="Enter Your Password" 
-                    value={password}
-                    onChange={handleChange("password")}
-                    required
-                    />
-                    <br />
-                </div>
+                        <tr>
+                            <td className="signupLabel">
+                                <label>Department: </label>
+                            </td>
+                            <td>
+                                <div className="form-group">
+                                    <input 
+                                    className="form-control"
+                                    id="dept"
+                                    type="text"
+                                    placeholder="Enter Your Department" 
+                                    value={department}
+                                    onChange={handleChange("department")}
+                                    required
+                                    />
+                                </div>
+                            </td>
+                        </tr>
 
+                        <tr>
+                            <td className="signupLabel">
+                                <label>Password: </label>
+                            </td>
+                            <td>
+                                <div className="form-group">
+                                    <input 
+                                    className="form-control"
+                                    id="password"
+                                    type="password"
+                                    placeholder="Enter Your Password" 
+                                    value={password}
+                                    onChange={handleChange("password")}
+                                    required
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div className="form-group">
-                    <label>Confirm Password: </label>
-                    <input 
-                    className="form-control1"
-                    id="cnfPassword"
-                    type="password"
-                    placeholder="Confirm Password" 
-                    value={cnfPassword}
-                    onChange={handleChange("cnfPassword")}
-                    required
-                    />
-                    <br />
-                </div>
-                {/* <p>Already have an account.? <NavLink to="/login">Login Here</NavLink></p> */}
-                <div className="form-group">
-                    <button type="submit" onClick = {handleSubmit} className="btn btn-outline-success m-2">SignUp</button>
-                    <button type="reset" className="btn btn-outline-secondary m-2">Reset</button>
-                </div>
-                
-                {/* <h5 className="text-center">{JSON.stringify(values)}</h5> */}
+                    <button type="submit" onClick = {handleSubmit} className="btn btn-outline-success m-2">Sign Up</button>
+                    <button type="reset" onClick={(e)=>{
+                        setValues({
+                            firstName: "",
+                            lastName: "",
+                            email: "",
+                            department: "",
+                            password: "",
+                            error: "",
+                            success: false,
+                            userType: "regular"
+                        })
+                    }} className="btn btn-outline-secondary m-2">Reset</button>
+                </div>       
             </form>
         )
     }

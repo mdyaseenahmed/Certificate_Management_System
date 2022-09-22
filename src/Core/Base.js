@@ -14,10 +14,12 @@ const Base = ({
       </div>
       <div className={className}>{children}</div>
       <div className="mt-4 mb-0 footer text-center">
-        <h4 className="p-4">
-          For any Queries, Please reach to us at{" "}
-          <button className="btn btn-primary">contact</button>
-        </h4>
+        <p className="mt-4 p-4">
+          <span className="mt-4 p-4 text" style={{ fontSize: "24px" }}>Designed & Developed By</span>
+          <ul style={{ listStyle: "none", fontSize: "18px", paddingInlineStart: "0px !important"}} className="footerUL">
+            <p><i className="fa fa-flash"></i> Himanshu Dangre <i className="fa fa-flash"></i> Md Yaseen Ahmed <i className="fa fa-flash"></i> Pranitha Gujjeti <i className="fa fa-flash"></i> Rohan Joseph <i className="fa fa-flash"></i> Tejasvi Srivastava</p> 
+          </ul>
+        </p>
       </div>
     </div>
   </div>

@@ -12,6 +12,8 @@ import MyCertificates from "./Components/MyCertificates";
 import RootCA from "./Components/RootCA";
 import DashboardLanding from "./Components/DashboardLanding";
 import SignedCert from "./Components/SignedCert";
+import CertInfo from "./Components/CertInfo";
+import RenewCertificate from "./Components/RenewCertificate";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
             <Route path="/dashboard/selfSigned" element={<SelfSignedCertificate />} />
             <Route path="/dashboard/rootCA" element={<RootCA />} />
             <Route path="/dashboard/signedCert" element={<SignedCert />} />
+            <Route path="/dashboard/getcertinfo/:id" element={<CertInfo />} />
+            <Route path="/dashboard/renewCert/:id" element={<RenewCertificate />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />}/>

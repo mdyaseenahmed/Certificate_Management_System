@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { isAuthenticated, signout } from '../auth/helper';
 import Base from '../Core/Base';
+import { Helmet } from "react-helmet";
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -64,14 +65,19 @@ const Dashboard = () => {
     };
 
     return (
-        <Base title={`Hello, ${user.firstName}`} description="Welcome to Certificate Management System.!">
-            <div className="row">
-                <div className="col-lg-4 col-sm-12">{sideNavigation()}</div>
-                <div className="col-lg-8 col-sm-12">
-                    <Outlet />
+        <>
+            <Helmet>
+                <title>Dashboard | {user.firstName}</title>
+            </Helmet>
+            <Base title={`Hello, ${user.firstName}`} description="Welcome to Certificate Management System.!">
+                <div className="row">
+                    <div className="col-lg-4 col-sm-12">{sideNavigation()}</div>
+                    <div className="col-lg-8 col-sm-12">
+                        <Outlet />
+                    </div>
                 </div>
-            </div>
-        </Base>
+            </Base>
+        </>
     )
 }
 

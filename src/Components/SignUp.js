@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { isAuthenticated, signup } from '../auth/helper';
+import { Helmet } from "react-helmet";
 
 const SignUp = () => {
+
+    // document.title('CMS | SignUp')
 
     const [values, setValues] = useState({
         firstName: "",
@@ -16,6 +19,8 @@ const SignUp = () => {
         loading: false
     })
 
+    const [inpType, setInpType] = useState('password')
+
     const { firstName, lastName, email, department, password, userType, success, error, loading } = values;
 
     const handleChange = (fieldName) => (e) => { 
@@ -25,31 +30,45 @@ const SignUp = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         setValues({...values, error: false, loading: true});
-        signup({ firstName, lastName, department, email, password, userType })
-        .then((data)=>{
-            console.log(data)
-            if(data.error) {
-                setValues({
-                    ...values,
-                    error: data.error,
-                    success: false,
-                    loading: false,
-                });
-            } else {
-                setValues({
-                    ...values,
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                    password: "",
-                    cnfPassword: "",
-                    error: "",
-                    success: true,
-                    loading: false
-                })
-            }
-        })
-        .catch(console.log("Error at Signup.!"))
+        if(!firstName.trim() || !lastName.trim() || !email.trim() || !password.trim() || !department.trim()) { 
+            setValues({...values, error: "Please fill all the details"})
+        } 
+        else if(password.length < 7) {
+            setValues({...values, error: "Password must be at least 7 Characters, must include 1 digit and 1 character"})
+        }
+        else if(password.search(/[a-z]/i) < 0) {
+            setValues({...values, error: "Password must be at least 7 Characters, must include 1 digit and 1 character"})
+        }
+        else if(password.search(/[0-9]/i) < 0) {
+            setValues({...values, error: "Password must be at least 7 Characters, must include 1 digit and 1 character"})
+        }
+        else {
+            signup({ firstName, lastName, department, email, password, userType })
+            .then((data)=>{
+                console.log(data)
+                if(data.error) {
+                    setValues({
+                        ...values,
+                        error: data.error,
+                        success: false,
+                        loading: false,
+                    });
+                } else {
+                    setValues({
+                        ...values,
+                        firstName: "",
+                        lastName: "",
+                        email: "",
+                        password: "",
+                        cnfPassword: "",
+                        error: "",
+                        success: true,
+                        loading: false
+                    })
+                }
+            })
+            .catch(console.log("Error at Signup.!"))
+        }
     }
 
     const loadingMessage = () => {
@@ -58,6 +77,14 @@ const SignUp = () => {
                 <h2>Loading...<i className="fa fa-cog fa-spin fa-fw"></i></h2>
             </div>
         );
+    }
+
+    const handleShowHide = () => {
+        if(inpType === 'password') {
+            setInpType('text')
+        } else {
+            setInpType('password')
+        }
     }
 
     const signUpForm = () => {
@@ -152,14 +179,16 @@ const SignUp = () => {
                             <td>
                                 <div className="form-group">
                                     <input 
-                                    className="form-control"
+                                    className="form-control1"
                                     id="password"
-                                    type="password"
+                                    type={inpType}
                                     placeholder="Enter Your Password" 
                                     value={password}
                                     onChange={handleChange("password")}
                                     required
+                                    autoComplete="off"
                                     />
+                                    <span className={ inpType === "password" ? "fa fa-eye btn showHideBtn" : "fa fa-eye-slash btn showHideBtn"} onClick = {handleShowHide}></span>
                                 </div>
                             </td>
                         </tr>
@@ -222,15 +251,24 @@ const SignUp = () => {
         <>
             {
                 isAuthenticated() ? <Navigate to="/dashboard"></Navigate> :
-                (<div className="card mb-4">
-                    <h4 className="card-header">
-                        <b><span className="fa fa-user-plus"></span> Sign Up </b>
-                    </h4>
-                    <br />
-                        {successMessage()}
-                        {errorMessage()}
-                        {signUpForm()}
-                </div>)
+                (
+                <>
+                    <Helmet>
+                        <title>CMS | SignUp</title>    
+                    </Helmet> 
+                
+                    <div className="card mb-4">
+                        <h4 className="card-header">
+                            <b><span className="fa fa-user-plus"></span> Sign Up </b>
+                        </h4>
+                        {/* <span className="text-left">{firstName}</span> */}
+                        <br />
+                            {successMessage()}
+                            {errorMessage()}
+                            {signUpForm()}
+                    </div>
+                </>
+                )
             }   
         </>
     );

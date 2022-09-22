@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const SignedCert = () => {
 
-    const notify = (name) => toast.info(`${name} Copied`,{  hideProgressBar: true, pauseOnHover: false, newestOnTop: true });
+    const notify = (name) => toast.info(`${name} Copied`,{ theme: "colored", pauseOnHover: false, newestOnTop: true });
 
     const { user, token } = isAuthenticated();
 
@@ -42,14 +42,16 @@ const SignedCert = () => {
         cert: "",
         pk: "",
         csr: "",
-        msg: ""
+        msg: "",
+        publicKey: "",
     })
 
     const { 
         cert,
         pk,
         csr,
-        msg
+        msg,
+        publicKey
     } = response;
 
     const { 
@@ -87,87 +89,97 @@ const SignedCert = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if(san1.length > 1) {
-            altNames.push(san1)
+        setValues({...values, error: "", loading: true});
+        if(!commonName.trim()) {
+            setValues({ ...values, error: "Common Name is Required." })
         }
-        if(san2.length > 1) {
-            altNames.push(san2)
+        else if(days < 0) {
+            setValues({ ...values, error: "Enter Valid Number of Days.!"})
         }
-        if(san3.length > 1) {
-            altNames.push(san3)
-        }
-        if(san4.length > 1) {
-            altNames.push(san4)
-        }
-        if(san5.length > 1) {
-            altNames.push(san5)
-        }
-        if(san6.length > 1) {
-            altNames.push(san6)
-        }
-        
-        setValues({...values, keyUsage: keyUsage1.join(','), email: user.email ,error: "", loading: true});
-
-        createSignedCertificate(token, { 
-            countryName,
-            stateOrProvinceName, 
-            localityName, 
-            organizationName,
-            organizationalUnitName,
-            commonName,
-            emailAddress,
-            keyBitSize,
-            csrSignAlgo,
-            days,
-            basicConstraints: "CA:false",
-            basicConstraintsCA: "CA:false",
-            email: user.email,
-            altNames,
-            keyUsage,
-        })
-        .then((data)=> {
-            if(data.error) {
-                setValues({
-                    ...values, 
-                    error: data.error,
-                    success:"",
-                    loading: false
-                })
+        else {
+            if(san1.length > 1) {
+                altNames.push(san1)
             }
-            else {
-                console.log(data);
-                setResponse({
-                    cert: data.cert,
-                    csr: data.csr,
-                    pk: data.pk,
-                    msg: data.success,
-                });
-                setValues({
-                    ...values,
-                    loading: false,
-                    success: "true",
-                    countryName: "",
-                    stateOrProvinceName: "",
-                    localityName: "",
-                    organizationName: "",
-                    organizationalUnitName: "",
-                    commonName: "",
-                    emailAddress: "",
-                    keyBitSize: "512",
-                    csrSignAlgo: "SHA224", 
-                    days: 365,
-                    san1: "",
-                    san2: "",
-                    san3: "",
-                    san4: "",
-                    san5: "",
-                    san6: "",
-                    keyUsage: "",
-                    error: false,
-                    email: "",
-                })
+            if(san2.length > 1) {
+                altNames.push(san2)
             }
-        })
+            if(san3.length > 1) {
+                altNames.push(san3)
+            }
+            if(san4.length > 1) {
+                altNames.push(san4)
+            }
+            if(san5.length > 1) {
+                altNames.push(san5)
+            }
+            if(san6.length > 1) {
+                altNames.push(san6)
+            }
+            
+            setValues({...values, keyUsage: keyUsage1.join(','), email: user.email ,error: "", loading: true});
+    
+            createSignedCertificate(token, { 
+                countryName,
+                stateOrProvinceName, 
+                localityName, 
+                organizationName,
+                organizationalUnitName,
+                commonName,
+                emailAddress,
+                keyBitSize,
+                csrSignAlgo,
+                days,
+                basicConstraints: "CA:false",
+                basicConstraintsCA: "CA:false",
+                email: user.email,
+                altNames,
+                keyUsage,
+            })
+            .then((data)=> {
+                if(data.error) {
+                    setValues({
+                        ...values, 
+                        error: data.error,
+                        success:"",
+                        loading: false
+                    })
+                }
+                else {
+                    console.log(data);
+                    setResponse({
+                        cert: data.cert,
+                        csr: data.csr,
+                        pk: data.pk,
+                        msg: data.success,
+                        publicKey: data.pub
+                    });
+                    setValues({
+                        ...values,
+                        loading: false,
+                        success: "true",
+                        countryName: "",
+                        stateOrProvinceName: "",
+                        localityName: "",
+                        organizationName: "",
+                        organizationalUnitName: "",
+                        commonName: "",
+                        emailAddress: "",
+                        keyBitSize: "512",
+                        csrSignAlgo: "SHA224", 
+                        days: 365,
+                        san1: "",
+                        san2: "",
+                        san3: "",
+                        san4: "",
+                        san5: "",
+                        san6: "",
+                        keyUsage: "",
+                        error: false,
+                        email: "",
+                    })
+                }
+            })
+        }
     }
 
     const copyToClipboard = (name) => (event) => {
@@ -468,6 +480,14 @@ const SignedCert = () => {
                 </div>
                 <br />
                 <div className="form-group">
+                    <label style={{ marginRight: "21.4rem" }}> Public Key (pub.key) </label> 
+                    <span className="btn btn-outline-success" onClick={copyToClipboard("PublicKey")}>
+                        Copy <i className="fa fa-clipboard"></i>
+                    </span>
+                    <textarea className="form-control" rows="10" id="PublicKey" value={publicKey} readOnly></textarea>
+                </div>
+                <br />
+                <div className="form-group">
                     <label style={{ marginRight: "25rem" }}> CSR (CSR.csr)</label>
                     <span className="btn btn-outline-success" onClick={copyToClipboard("CSR")}>
                         Copy <i className="fa fa-clipboard"></i>
@@ -554,7 +574,7 @@ const SignedCert = () => {
                 {msg ? certificateContents() : ""}
                 {errorMessage()}
                 {formUI()}
-                <ToastContainer />
+                <ToastContainer theme="colored" />
             </div>
         </>
     )

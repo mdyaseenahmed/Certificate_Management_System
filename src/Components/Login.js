@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { authenticate, isAuthenticated, signin } from '../auth/helper';
+import { Helmet } from "react-helmet";
 
 const Login = () => {
 
@@ -122,11 +123,12 @@ const Login = () => {
                                     <input 
                                     className="form-control"
                                     type="password" 
-                                    id="lpassword"
+                                    id="password"
                                     placeholder="Enter Your password"
                                     value={password}
                                     onChange={handleChange("password")}
                                     required
+                                    autoComplete="off"
                                     />
                                 </div>
                             </td>
@@ -146,7 +148,15 @@ const Login = () => {
     return (
         <>
             {
-                isAuthenticated() ? <Navigate to="/dashboard" /> : loginForm()
+                isAuthenticated() ? <Navigate to="/dashboard" /> : 
+                (
+                    <>
+                        <Helmet>
+                            <title>CMS | Login</title>
+                        </Helmet>
+                        {loginForm()}
+                    </>
+                )
             }
         </>
     )

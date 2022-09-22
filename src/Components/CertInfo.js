@@ -37,6 +37,7 @@ const CertInfo = () => {
 
     useEffect(()=>{
         preload(certificateId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     const loadingMessage = () => {
